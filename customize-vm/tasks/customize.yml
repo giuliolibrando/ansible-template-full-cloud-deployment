@@ -1,0 +1,17 @@
+---
+#- pause:
+#    minutes: 3
+    
+- name: Wait for system to become reachable
+  wait_for_connection:
+    delay: 30
+    sleep: 30
+    timeout: 3600    
+
+- name: Add user {{ lastvm |lower}} #la password è l'hash md5
+  command: " useradd --create-home -s /bin/bash -p 'INSERIRE HASH PASSWORD' {{ lastvm |lower}}"
+  become: true
+  
+- name: Aggiungi al gruppo sudo
+  command: " usermod -aG sudo {{ lastvm |lower}}"
+  become: true

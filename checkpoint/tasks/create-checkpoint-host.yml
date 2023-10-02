@@ -1,0 +1,8 @@
+---
+- name: Add host 
+  add_host:
+    name: "{{ checkpoint_host }}"
+    checkpoint_obj_name: "{{ lastvm }}"
+    checkpoint_obj_ip: "XXX.XXX.XXX.{{ lastvm_int |trim}}"
+    checkpoint_obj_ip_nat: "XXX.XXX.XXX.{{ lastvm_int |trim}}"
+    checkpoint_obj_user: "{{ hostvars['localhost']['user_matricola'] }}"

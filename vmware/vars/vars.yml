@@ -1,0 +1,19 @@
+---
+#variabili vmware
+vm_folder: ""
+datacenter_name: ""
+cluster_name: ""
+datastore_name: ""
+network_name: ""
+host_name: "{{ lastvm }}"
+host_ip: "XXX.XXX.XXX.{{ lastvm_int |trim}}"
+host_ip_nat: "XXX.XXX.XXX.{{ lastvm_int |trim}}"
+host_gateway: "XXX.XXX.XXX.1"
+host_dns1: "XXX.XXX.XXX.XXX"
+host_dns2: "XXX.XXX.XXX.XXX" 
+#modificare password annotation con hash di linux
+annotation:  | 
+             *** Auto-Deployed by Ansible ***
+                 HostName: {{ lastvm }}
+                 Username: {{ lastvm |lower}}
+                 Password: password

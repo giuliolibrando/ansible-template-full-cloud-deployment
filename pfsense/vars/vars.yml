@@ -1,0 +1,12 @@
+---
+#variabili pfsense
+user_nome:
+user_cognome:
+pfsense_host: "XXX.XXX.XXX.XXX"
+pfsense_user: "{{ PfSense_Username }}"
+pfsense_password: "{{ PfSense_Password }}"
+pfsense_interface: "lan"
+vm_mac: "{{ host_mac_address }}"
+vm_ip: "XXX.XXX.XXX.{{ lastvm_int |trim}}"
+vm_name: "{{ lastvm }}"
+vm_description: "{{ user_nome }} {{ user_cognome }}"

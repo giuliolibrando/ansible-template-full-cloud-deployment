@@ -1,0 +1,32 @@
+---
+- name: Pause for 2 minutes to Customize VM
+  pause:
+    minutes: 2
+
+- name: Reboot VM
+  vmware_guest:
+    hostname: "{{ vsphere_host }}"
+    username: "{{ vsphere_username }}"
+    password: "{{ vsphere_password }}"
+    validate_certs: False
+    name: "{{ lastvm }}"
+    state: restarted
+    
+- name: Ensure Network is attached
+  vmware_guest_network:
+    hostname: "{{ vsphere_host }}"
+    username: "{{ vsphere_username }}"
+    password: "{{ vsphere_password }}"
+    validate_certs: False
+    name: "{{ lastvm }}"
+    state: present
+    network_name: "{{ network_name }}"
+    connected: true
+
+    
+    
+- name: Wait for system to become reachable
+  wait_for_connection:
+    delay: 0
+    sleep: 60
+    timeout: 3600

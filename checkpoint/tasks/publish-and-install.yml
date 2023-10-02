@@ -1,0 +1,26 @@
+---
+- name: Publish 
+  uri:
+    url: "https://XXX.XXX.XXX.XXX:443/web_api/publish"
+    method: POST
+    body_format: json
+    validate_certs: no
+    headers:
+      Content-Type: "application/json"
+      X-chkp-sid: "{{ login_output.json.sid }}"
+    body_format: raw
+    body: "{ }"
+    return_content: yes
+    validate_certs: False
+  register: publish_output        
+             
+ 
+    
+- name: install-policy
+  check_point.mgmt.cp_mgmt_install_policy:
+    access: true
+    install_on_all_cluster_members_or_fail: yes
+    policy_package: XXX
+    targets:
+      - XXXXXX
+    threat_prevention: false   

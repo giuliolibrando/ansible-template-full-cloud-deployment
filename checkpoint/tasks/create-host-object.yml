@@ -1,0 +1,7 @@
+---
+- name: Create host object "{{ checkpoint_obj_name }}"
+  check_point.mgmt.cp_mgmt_host:
+    name: "{{ checkpoint_obj_name }}"
+    ip_address: "{{ checkpoint_obj_ip }}"
+    auto_publish_session: true
+    auto_install_policy: false

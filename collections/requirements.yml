@@ -1,0 +1,8 @@
+
+collections:
+  - name: community.general
+    source: https://galaxy.ansible.com
+  - name: community.windows
+    source: https://galaxy.ansible.com    
+  - name: check_point.mgmt
+    source: https://galaxy.ansible.com

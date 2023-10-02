@@ -1,0 +1,63 @@
+---
+
+- name: Trova matricola da email
+  community.general.ldap_search:
+    server_uri: "ldaps://XXXXXXXXXXXXXXXXXXXX:636"
+    bind_dn: ""
+    dn: "ou=ateneo,o=uniroma1,c=it"
+    scope: children
+    filter: "(&(objectClass=*)(mail=*{{ user_mail }}*))"
+  register: results
+   
+- name: Extract Matricola   
+  set_fact:
+    cacheable: yes     
+    user_matricola: "{{ item }}"        
+  with_items:
+    - "{{ results | json_query(query) }}"
+  vars:   
+    query: "results[0].employeenumber"
+
+    
+- name: Extract Nome   
+  set_fact:
+    cacheable: yes    
+    user_nome: "{{ item }}"        
+  with_items:
+    - "{{ results | json_query(query) }}"
+  vars:   
+    query: "results[0].givenname"  
+
+    
+- name: Extract Cognome   
+  set_fact:
+    cacheable: yes     
+    user_cognome: "{{ item }}"        
+  with_items:
+    - "{{ results | json_query(query) }}"
+  vars:   
+    query: "results[0].sn"     
+
+- name: Extract Codice Fiscale   
+  set_fact:
+    cacheable: yes     
+    user_cf: "{{ item }}"        
+  with_items:
+    - "{{ results | json_query(query) }}"
+  vars:   
+    query: "results[0].codicefiscale"       
+
+   
+- debug:
+    var: user_matricola
+- debug:
+    var: user_nome
+- debug:
+    var: user_cognome
+- debug:
+    var: user_cf
+- debug:
+    var: user_mail
+     
+     
+     

@@ -1,0 +1,9 @@
+---
+- name: add-access-role "{{ checkpoint_obj_name }}_Access_Role" for user "{{ checkpoint_obj_user }}"
+  check_point.mgmt.cp_mgmt_access_role:
+    name: "{{ checkpoint_obj_name }}_Access_Role"
+    state: present
+    users: 
+      - selection: "{{ checkpoint_obj_user }}"
+        source: "XXXX_Account_Unit"
+    auto_publish_session: true

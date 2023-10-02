@@ -1,0 +1,10 @@
+---
+- name: Create nat for host "{{ checkpoint_obj_name }}" | "{{ checkpoint_obj_ip }}" -> "{{ checkpoint_obj_ip_nat }}"
+  check_point.mgmt.cp_mgmt_host:
+    name: "{{ checkpoint_obj_name }}"
+    nat_settings:
+      auto_rule: true
+      install_on: XXXXXXXX
+      method: static
+      ip_address: "{{ checkpoint_obj_ip_nat }}"
+    auto_publish_session: true

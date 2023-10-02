@@ -1,0 +1,59 @@
+---
+- name: Clone the template
+  vmware_guest:
+      hostname: "{{ vsphere_host }}"
+      username: "{{ vsphere_username }}"
+      password: "{{ vsphere_password }}"
+      validate_certs: False
+      name: "{{ host_name }}"
+      template: Ubuntu2004_Cloud_Template
+      datacenter: "{{ datacenter_name }}"
+      folder: /{{ datacenter_name }}/vm/IaaS
+      cluster: "{{ cluster_name }}"
+      datastore: "{{datastore_name}}"
+      annotation: "{{ annotation }}"
+      networks:
+      - name: "{{ network_name }}"
+        ip: "{{ host_ip }}"
+        netmask: 255.255.255.0
+        gateway: "{{ host_gateway }}"
+        type: static
+        dns_servers: "{{ host_dns1 }}"
+        start_connected: true
+      customization:
+        hostname: "{{ host_name|lower }}"
+        dns_servers:
+        - "{{ host_dns1 }}"
+        - "{{ host_dns2 }}"
+      state: poweredon
+#      wait_for_ip_address: yes
+  register: results
+#  delegate_to: localhost
+ 
+- name: Extract Mac Address   
+  set_fact:
+    cacheable: yes     
+    host_mac_address: "{{ item }}"        
+  with_items:
+    - "{{ results | json_query(query) }}"
+  vars:   
+    query: "instance.hw_eth0.macaddress" 
+    
+- name: Extract Instance UUID  
+  set_fact:
+    cacheable: yes     
+    host_uuid: "{{ item }}"        
+  with_items:
+    - "{{ results | json_query(query) }}"
+  vars:   
+    query: "instance.instance_uuid"     
+ 
+- debug:
+    var: host_mac_address
+    
+- debug:
+    var: host_uuid
+ 
+#- name: Pause for 1 minutes to Customize VM
+#  pause:
+#    minutes: 1

@@ -1,0 +1,60 @@
+---
+- name: Gather all VMs from a specific folder
+  vmware_vm_info:
+     hostname: "{{ vsphere_host }}"
+     username: "{{ vsphere_username }}"
+     password: "{{ vsphere_password }}"
+     validate_certs: no
+     folder: "{{ vm_folder }}"
+  delegate_to: localhost
+  register: vm_info
+
+- name: Extract last VM   
+  set_fact:
+    cacheable: yes     
+    lastvm: "{{ item }}"  
+  with_items:
+    - "{{ vm_info | json_query(query) | sort(reverse=False,attribute='guest_name') }}"
+  vars:   
+    query: "virtual_machines"
+    
+- debug:
+    var: lastvm   
+
+# split nome da numero /es. lastvm_string=IaaS  lastvm_int=012   
+- name: "Set lastvm_string"
+  set_fact:
+      lastvm_string: "{{ lastvm.guest_name.split('_').0 }}"
+
+- name: "Set lastvm_int"
+  set_fact:
+      lastvm_int: "{{ lastvm.guest_name.split('_').1 }}"
+
+      
+      
+- name: "Increase Last VM number +1"
+  set_fact:
+    lastvm_int: "{{ lastvm_int |int + 1}} "
+      
+- name: "Reconstruct Name if <= 99"
+  # if number <= 99 add 0 in front  (trim deletes unwanted spaces)
+  set_fact:
+    lastvm: "{{ lastvm_string |trim }}_0{{ lastvm_int |trim}}"
+  when: lastvm_int |int <= 99  
+    
+- name: "Reconstruct Name if >= 100"
+  # if number >= 100 (trim deletes unwanted spaces)
+  set_fact:
+    lastvm: "{{ lastvm_string | trim }}_{{ lastvm_int | trim}}"
+  when: lastvm_int |int >= 100      
+  
+  
+- name: "Set stats"
+  set_stats:
+    data:
+      lastvm: "{{ lastvm }}"
+      lastvm_int: "{{ lastvm_int }}"
+    per_host: no
+  
+- debug:
+    var: lastvm  

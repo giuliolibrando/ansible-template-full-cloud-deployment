@@ -1,0 +1,4 @@
+---
+- include_tasks: find-last-vm.yml
+- include_tasks: deploy-vm.yml
+- include_tasks: add-new-host.yml

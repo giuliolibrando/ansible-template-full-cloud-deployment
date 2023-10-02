@@ -1,0 +1,4 @@
+---
+- name: Print info sent by Squest
+  debug:
+    var: squest

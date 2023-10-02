@@ -1,0 +1,5 @@
+---
+- name: Add host per customization
+  add_host:
+    name: "{{ host_ip }}"
+    groups: customization

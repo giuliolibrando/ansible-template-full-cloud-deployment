@@ -1,0 +1,33 @@
+---
+- name: login to "{{ pfsense_host }}"
+  uri:
+    url: "https://{{ pfsense_host }}/api/v1/access_token"
+    method: POST
+    body_format: json
+    validate_certs: no
+    body:
+      client-id: "{{ pfsense_user }}"
+      client-token: "{{ pfsense_password }}"
+    body_format: json
+    return_content: yes
+    validate_certs: False
+  register: login_output
+          
+- name: Add Static DHCP IP to "{{ vm_name }}" -> "{{ vm_ip }}" | {{ vm_mac }}
+  uri:
+    url: "https://{{ pfsense_host }}/api/v1/services/dhcpd/static_mapping"
+    method: POST
+    headers:
+      Content-Type: "application/json"
+      Authorization: "Bearer {{  login_output.json.data.token }}"        
+    body:
+      interface: "{{ pfsense_interface }}"
+      mac: "{{ vm_mac }}"
+      ipaddr: "{{ vm_ip }}"
+      cid: "{{ vm_name |lower}}"
+      hostname: "{{ vm_name |lower}}"
+      descr: "{{ vm_description }}"
+    body_format: json
+    return_content: yes
+    validate_certs: False
+     

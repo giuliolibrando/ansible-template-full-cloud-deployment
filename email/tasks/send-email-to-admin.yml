@@ -1,0 +1,17 @@
+---
+- name: Sending an e-mail using Gmail SMTP servers
+  community.general.mail:
+    host: XXXXXXXXXXXXXX
+    port: XXX
+    from: XXXXXXXXXXXXXXXXXX
+    to: XXXX XXXX <XXXX@XXX>
+    subject: Deployment Hosting VM {{ lastvm }} concluso con successo
+    body: | 
+           Deployment concluso con successo!
+           -VMWARE: VM {{ lastvm }} creata e configurata.
+           -AD: Utente {{ user_matricola }} creato su Active Directory
+           -CHECKPOINT: {{ checkpoint_obj_name }}_Access_Role creata con utente {{user_matricola }}
+           -CHECKPOINT: NAT {{ checkpoint_obj_ip }} -> {{ checkpoint_obj_ip_nat }} creato
+           -PFSENSE: DHCP Aggiunto su PfSense
+  delegate_to: localhost
+

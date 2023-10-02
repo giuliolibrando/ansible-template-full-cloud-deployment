@@ -1,0 +1,11 @@
+---
+ansible_httpapi_use_ssl: True
+ansible_httpapi_validate_certs: False
+ansible_user: "{{ CheckPoint_Username }}"
+ansible_password: "{{ CheckPoint_Password }}"
+checkpoint_host: "XXX.XXX.XXX.XXX"
+checkpoint_rule_section: ""
+ansible_network_os: check_point.mgmt.checkpoint
+ansible_command_timeout: 60
+rule_number_query: rulebase.ansible_facts."access-rulebase".rulebase..rulebase.."rule-number"
+

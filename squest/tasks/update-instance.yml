@@ -1,0 +1,37 @@
+---
+- name: Create a resource in squest
+  uri:
+    url: "{{ squest_api_url }}resource_tracker/resource_group/{{ resource_group_vm_id }}/resources/"
+    user: "{{ squest_user }}"
+    password: "{{ squest_password }}"
+    method: POST
+    body:
+      name: "{{ lastvm }}"
+      service_catalog_instance: "{{ squest['request']['instance']['id'] }}"
+      attributes:
+        - name: "vCPU"
+          value: "4"
+        - name: "Memory"
+          value: "8"
+        - name: "Storage"
+          value: "60"          
+    force_basic_auth: yes
+    status_code: 201
+    body_format: json
+
+
+
+- name: Update spec of the instance via the squest API
+  uri:
+    url: "{{ squest_api_url }}service_catalog/admin/instance/{{ squest['request']['instance']['id'] }}/" # do not forget the last slash
+    user: "{{ squest_user }}"
+    password: "{{ squest_password }}"
+    method: PATCH
+    body:
+      spec:
+        squest_vm_uuid: "{{ host_uuid }}"
+        squest_vm_name: "{{ lastvm  }}"
+        squest_vm_cid: "{{ lastvm |lower}}"
+    force_basic_auth: yes
+    status_code: 200
+    body_format: json

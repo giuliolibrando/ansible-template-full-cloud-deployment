@@ -1,0 +1,20 @@
+---
+
+- name: Ensure user  is present in OU 
+  community.windows.win_domain_user:
+    domain_server: "XXX.XXX.XXX.XXX"
+    name: "{{ hostvars['localhost']['user_matricola'] }}"
+    firstname: "{{ hostvars['localhost']['user_nome'] }}"
+    surname: "{{ hostvars['localhost']['user_cognome'] }}"
+#        description: "{{ udescrizione }}"
+    email: "{{ hostvars['localhost']['user_mail'] }}"
+    enabled: yes
+    password: "XXXXXXXX"
+    password_expired: yes
+    state: present
+    path: ""
+    upn: "{{ hostvars['localhost']['user_matricola'] }}@XXXXXXX"
+    attributes:
+      displayName: "{{ hostvars['localhost']['user_nome'] }} {{ hostvars['localhost']['user_cognome'] }}"
+      cn: "{{ hostvars['localhost']['user_matricola'] }}"
+      employeeNumber: "{{ hostvars['localhost']['user_cf'] }}"

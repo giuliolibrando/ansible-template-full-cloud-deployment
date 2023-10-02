@@ -1,0 +1,39 @@
+---
+- name: login 
+  uri:
+    url: "https://XXX.XXX.XXX.XXX:443/web_api/login"
+    method: POST
+    body_format: json
+    validate_certs: no
+    body:
+      user: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+    body_format: json
+    return_content: yes
+    validate_certs: False
+  register: login_output
+
+
+- name: Add rule "Regola VPN per {{ checkpoint_obj_name }}"
+  uri:
+    url: "https://XXX.XXX.XXX.XXX:443/web_api/add-access-rule"
+    method: POST
+    body_format: json
+    validate_certs: no
+    headers:
+      Content-Type: "application/json"
+      x-chkp-sid: "{{  login_output.json.sid }}"
+    body:
+      layer: "Network"
+      position:
+         bottom: "{{ checkpoint_rule_section }}"
+      name: "Regola VPN per {{ checkpoint_obj_name }}"
+      service: "Any"
+      source: "{{ checkpoint_obj_name }}_Access_Role"
+      destination: "{{ checkpoint_obj_name }}"
+      vpn: "RemoteAccess"
+      action: "Accept"
+      track: "Log"
+    body_format: json
+    return_content: yes
+    validate_certs: False

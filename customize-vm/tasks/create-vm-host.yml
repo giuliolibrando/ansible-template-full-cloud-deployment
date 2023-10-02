@@ -1,0 +1,6 @@
+---
+- name: Add host 
+  add_host:
+    name: "customizedvm"
+    lastvm: "{{ lastvm }}"
+    ansible_host: "XXX.XXX.XXX.{{ lastvm_int |trim }}"

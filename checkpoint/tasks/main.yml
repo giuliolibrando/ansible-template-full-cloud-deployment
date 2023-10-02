@@ -1,0 +1,6 @@
+---
+- include_tasks: create-host-object.yml
+- include_tasks: create-host-nat.yml
+- include_tasks: create-access-role.yml
+- include_tasks: add-vpn-rule.yml
+- include_tasks: publish-and-install.yml

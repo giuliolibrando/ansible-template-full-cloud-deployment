@@ -1,0 +1,164 @@
+---
+######### SQUEST INIT ##################
+#- hosts: localhost
+#  become: no
+#  gather_facts: no
+#  
+#  vars_files:
+#    - squest/vars/vars.yml
+#    
+#  tasks:
+#    - name: SQUEST
+#      include_role:
+#        name: squest
+#        tasks_from: debug
+#########################################
+
+
+######### LDAP SEARCH ##################
+- hosts: localhost
+  become: no
+  gather_facts: no
+  
+  vars_files:
+    - ldap-search/vars/vars.yml
+    
+  tasks:
+    - name: Cerca user in ldap
+      include_role:
+        name: ldap-search
+#########################################
+
+
+######### ACTIVE DIRECTORY###############
+- hosts: AD_HOST #inserire
+  become: no
+  gather_facts: no
+  
+  vars_files:
+    - active-directory/vars/vars.yml
+    
+  tasks:        
+    - name: Crea user in Active Directory (se non presente)
+      include_role:
+        name: active-directory     
+#########################################
+
+
+######### VMWARE vSPHERE ################
+- hosts: localhost
+  become: no
+  gather_facts: no
+  
+  vars_files:
+    - vmware/vars/vars.yml
+   
+  tasks:
+    - name: Cerca ultima VM IaaS
+      include_role:
+        name: vmware
+#########################################
+
+######### PFSENSE #######################
+- hosts: localhost
+  become: no
+  gather_facts: no
+  connection: httpapi
+  
+  vars_files:
+    - pfsense/vars/vars.yml
+    
+  tasks:
+    - name: Aggiungi regole DHCP Isolated 2000
+      include_role:
+        name: pfsense
+#########################################
+
+######### CHECKPOINT ####################
+- hosts: localhost
+  become: no
+  gather_facts: no
+  connection: httpapi
+  
+  vars_files:
+    - checkpoint/vars/vars.yml
+    
+  tasks:  
+    - name: Crea Host Checkpoint+
+      include_role:
+        name: checkpoint
+        tasks_from: create-checkpoint-host
+        
+      
+- hosts: CHECKPOINT_HOST #inserire
+  become: no
+  gather_facts: no
+  connection: httpapi
+  
+  vars_files:
+    - checkpoint/vars/vars.yml
+    
+  tasks:   
+    - name: Aggiungi Rule, Access Role, VPN, NAT
+      include_role:
+        name: checkpoint
+#########################################
+
+######### CUSTOMIZE VM ##################
+- hosts: localhost
+  become: no
+  gather_facts: no
+  
+  vars_files:
+    - customize-vm/vars/vars.yml
+    
+  tasks:  
+    - name: Crea Host da Customizzare
+      include_role:
+        name: customize-vm
+        tasks_from: create-vm-host
+
+
+- hosts: customizedvm
+  become: no
+  gather_facts: no
+  
+  vars_files:
+    - customize-vm/vars/vars.yml
+    
+  tasks:
+    - name: Effettua ultime modifiche alla VM
+      include_role:
+        name: customize-vm  
+#########################################
+
+######### SEND EMAIL ####################
+- hosts: localhost
+  become: no
+  gather_facts: no
+  
+  vars_files:
+    - email/vars/vars.yml
+    
+  tasks:
+    - name: Invia Email all'utente
+      include_role:
+        name: email
+#########################################
+
+######### SQUEST POST ###################
+#- hosts: localhost
+#  become: no
+#  gather_facts: no
+#  
+#  vars_files:
+#    - squest/vars/vars.yml
+#    
+#  tasks:
+#    - name: SQUEST
+#      include_role:
+#        name: squest
+#        tasks_from: update-instance
+#########################################
+        
+        

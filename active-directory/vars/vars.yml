@@ -1,0 +1,8 @@
+---
+
+ansible_connection: winrm
+ansible_winrm_server_cert_validation: ignore
+ansible_port: 5986
+ansible_user: "{{ domainadmin_username }}"
+ansible_password: "{{ domainadmin_password }}"
+ansible_winrm_transport: ntlm
