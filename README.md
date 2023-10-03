@@ -5,4 +5,5 @@ Available as Squest resource, uncomment the main.yml section to enable it
 
 
 
-![Alt text](grafico.png)
+
+![Alt text](graph.png)
