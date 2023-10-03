@@ -4,4 +4,5 @@ Ansible Playbook with roles to create vm on vSphere, edit CheckPoint host,vpn,ro
 Available as Squest resource, uncomment the main.yml section to enable it
 
 
+
 ![Alt text](grafico.png)
